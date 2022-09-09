@@ -3,7 +3,7 @@ An unofficial app for exxxpose.me for Android
 
 Free download for Android: [Download](https://github.com/exxxposeApp/exxxpose-Android/raw/main/exxxpose.me.apk)
 
-### why is the app not available on google play?
+### Why is the app not available on google play?
 Google play unfortunately does not allow apps with adult content
 ### Does the app contain malware?
 No! If you don't trust the app, you can always look at the source code
