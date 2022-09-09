@@ -21,6 +21,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.webkit.*
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -28,6 +29,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import java.net.URISyntaxException
@@ -441,6 +443,30 @@ class Main : AppCompatActivity() {
         }
 
 
+        //Show update popup
+        val updateState : String = intent.getStringExtra("updateAvalible").toString()
+
+        if(updateState == "true"){
+            val bottomSheetDialog = BottomSheetDialog(this)
+            bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout_update)
+
+
+            bottomSheetDialog.findViewById<LinearLayout>(R.id.getTheUpdate)
+                ?.setOnClickListener(View.OnClickListener {
+                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/exxxposeApp/exxxpose-Android"))
+                    startActivity(browserIntent)
+                    bottomSheetDialog.dismiss()
+                })
+
+            bottomSheetDialog.findViewById<LinearLayout>(R.id.Dismiss)
+                ?.setOnClickListener(View.OnClickListener {
+                    bottomSheetDialog.dismiss()
+                })
+
+
+            bottomSheetDialog.show()
+        }
+
 
 
         //Floating btn
@@ -541,6 +567,7 @@ class Main : AppCompatActivity() {
         if(onLogin){
             val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
             bottomNavigationView.selectedItemId = R.id.account
+            onLogin = false
         }
 
         //is post expired

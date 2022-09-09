@@ -20,13 +20,12 @@ import androidx.core.content.ContextCompat
 
 class MainActivity : AppCompatActivity() {
     lateinit var webview: WebView
-    var error = true
+    var updateState = false
 
     @SuppressLint("SetTextI18n", "SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
 
         webview = findViewById(R.id.checkversion)
@@ -40,9 +39,7 @@ class MainActivity : AppCompatActivity() {
                 val versionCode = BuildConfig.VERSION_CODE
 
                 if(versionCode.toString() != version){
-                    updateInfo()
-                }else{
-                    startApp()
+                    setUpdateStateTrue()
                 }
             }
         }
@@ -81,36 +78,16 @@ class MainActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed(
             {
-                if(error){
-                    startApp()
-                }
-            },
-            2000 // value in milliseconds
-        )
-
-    }
-
-    fun startApp(){
-        error = false
-        Handler(Looper.getMainLooper()).postDelayed(
-            {
                 val intent = Intent(this, Main::class.java)
+                intent.putExtra("updateAvalible", updateState.toString())
                 startActivity(intent)
                 finish()
             },
             600 // value in milliseconds
         )
-    }
 
-    fun updateInfo(){
-        error = false
-        Handler(Looper.getMainLooper()).postDelayed(
-            {
-                val intent = Intent(this, NewUpdateAvailableView::class.java)
-                startActivity(intent)
-                finish()
-            },
-            600 // value in milliseconds
-        )
+    }
+    fun setUpdateStateTrue(){
+        updateState = true
     }
 }

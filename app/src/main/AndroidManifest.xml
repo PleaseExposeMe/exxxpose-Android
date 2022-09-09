@@ -19,9 +19,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".NewUpdateAvailableView"
-            android:exported="false" />
-        <activity
             android:name=".Bookmarks"
             android:exported="false" />
         <activity
