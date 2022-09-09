@@ -1,7 +1,11 @@
 # Android app for exxxpose.me
 An unofficial app for exxxpose.me for Android
 
+# Download
+
 Free download for Android: [Download](https://github.com/exxxposeApp/exxxpose-Android/raw/main/exxxpose.me.apk)
+
+# FAQ
 
 ### Why is the app not available on google play?
 Google play unfortunately does not allow apps with adult content
@@ -10,6 +14,7 @@ No! If you don't trust the app, you can always look at the source code
 ### How do I install the app?
 [Instruction](https://www.verizon.com/support/knowledge-base-222186/)\
 [Instruction Video](https://www.youtube.com/watch?v=KC4fe035egI)\
+
 Under certain circumstances, the process may be different on your Android device. Just search for "[Your phone manufacturer] how to install apps from unknows sources" on Google
 
 # What is exxxpose.me?
@@ -77,3 +82,5 @@ This site is meant for the male exposure community.
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+   
+   ### Use and share the app like the boys 😏
