@@ -568,6 +568,30 @@ class Main : AppCompatActivity() {
             val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
             bottomNavigationView.selectedItemId = R.id.account
             onLogin = false
+        }else{
+            //Update bottom nav
+
+            if(url == "https://www.exxxpose.me/"){
+                val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+                disableOnClickEvents = true
+                bottomNavigationView.selectedItemId = R.id.home
+                disableOnClickEvents = false
+            }else  if(url == "https://www.exxxpose.me/notifications/"){
+                val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+                disableOnClickEvents = true
+                bottomNavigationView.selectedItemId = R.id.notifications
+                disableOnClickEvents = false
+            }else  if(url == "https://www.exxxpose.me/me/"){
+                val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+                disableOnClickEvents = true
+                bottomNavigationView.selectedItemId = R.id.account
+                disableOnClickEvents = false
+            }else  if(url == "https://www.exxxpose.me/games/"){
+                val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+                disableOnClickEvents = true
+                bottomNavigationView.selectedItemId = R.id.games
+                disableOnClickEvents = false
+            }
         }
 
         //is post expired
@@ -576,31 +600,6 @@ class Main : AppCompatActivity() {
             Snackbar("Post is expired")
         }
         postOpened = false
-
-        //Update bottom nav
-
-        if(url == "https://www.exxxpose.me/"){
-            val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-            disableOnClickEvents = true
-            bottomNavigationView.selectedItemId = R.id.home
-            disableOnClickEvents = false
-        }else  if(url == "https://www.exxxpose.me/notifications/"){
-            val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-            disableOnClickEvents = true
-            bottomNavigationView.selectedItemId = R.id.notifications
-            disableOnClickEvents = false
-        }else  if(url == "https://www.exxxpose.me/me/"){
-            val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-            disableOnClickEvents = true
-            bottomNavigationView.selectedItemId = R.id.account
-            disableOnClickEvents = false
-        }else  if(url == "https://www.exxxpose.me/games/"){
-            val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-            disableOnClickEvents = true
-            bottomNavigationView.selectedItemId = R.id.games
-            disableOnClickEvents = false
-        }
-
     }
 
     override fun onBackPressed() {
