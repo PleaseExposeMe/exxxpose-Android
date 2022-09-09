@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Exxxpose.me</string>
+    <string name="home">Feed</string>
+    <string name="notifications">Notifications</string>
+    <string name="account">Me</string>
+    <string name="upload">Upload</string>
+    <string name="games">Games</string>
+</resources>
