@@ -7,6 +7,49 @@ Download for Android: [Download](https://github.com/exxxposeApp/exxxpose-Android
 exxxpose.me is an adult picture posting site.\
 This site is meant for the male exposure community.
 
+# Screenshots
+
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-0lax">
+    <p>Upload</p>
+    </th>
+    <th class="tg-0lax">
+        <p>Feed</p>
+        </th>
+    <th class="tg-0lax">
+        <p>Bookmarks</p>
+        </th>
+    <th class="tg-0lax">
+        <p>Post</p>
+        </th>
+          <th class="tg-0lax">
+        <p>Notifications</p>
+        </th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax">
+    <img src="https://github.com/exxxposeApp/exxxpose-Android/raw/main/screenshots/Screenshot_1.jpg" width="250px">
+    </td>
+    <td class="tg-0lax">
+    <img src="https://github.com/exxxposeApp/exxxpose-Android/raw/main/screenshots/Screenshot_2.jpg" width="250px">
+    </td>
+    <td class="tg-0lax">
+    <img src="https://github.com/exxxposeApp/exxxpose-Android/raw/main/screenshots/Screenshot_3.jpg" width="250px">
+    </td>
+    <td class="tg-0lax">
+    <img src="https://github.com/exxxposeApp/exxxpose-Android/raw/main/screenshots/Screenshot_4.png" width="250px">
+    </td>
+      <td class="tg-0lax">
+    <img src="https://github.com/exxxposeApp/exxxpose-Android/raw/main/screenshots/Screenshot_5.jpg" width="250px">
+    </td>
+  </tr>
+</tbody>
+</table>
+
 # Contact
 
 [ExposeMeNowMarcel@outlook.de](mailto:ExposeMeNowMarcel@outlook.de)
