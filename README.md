@@ -1,4 +1,4 @@
-# exxxpose-Android
+# Android app for exxxpose.me
 An unofficial app for exxxpose.me for Android
 
 Free download for Android: [Download](https://github.com/exxxposeApp/exxxpose-Android/raw/main/exxxpose.me.apk)
