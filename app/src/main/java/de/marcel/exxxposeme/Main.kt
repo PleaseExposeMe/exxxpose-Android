@@ -28,10 +28,12 @@ import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
+import com.beust.klaxon.Klaxon
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.serialization.Serializable
 import java.net.URISyntaxException
 
 
@@ -43,6 +45,7 @@ class Main : AppCompatActivity() {
     var leaveTimeStemp =  System.currentTimeMillis()
     var postOpened = false
     var disableOnClickEvents = false
+    var isUpdateAvailible = false
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -60,6 +63,9 @@ class Main : AppCompatActivity() {
                 uploadMessage = null
             }
     }
+
+    @Serializable
+    data class Data(val version: String)
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -436,36 +442,48 @@ class Main : AppCompatActivity() {
         //Check Internet Connection
         val webViewhelper = WebViewHelper()
         if(webViewhelper.isOnline(applicationContext)){
-            //Load site
-            webview.loadUrl("https://www.exxxpose.me/")
+                //Load site
+                webview.loadUrl("https://www.exxxpose.me/")
         }else{
             webview.loadUrl("file:///android_asset/noconnection.html")
         }
 
 
         //Show update popup
-        val updateState : String = intent.getStringExtra("updateAvalible").toString()
 
-        if(updateState == "true"){
-            val bottomSheetDialog = BottomSheetDialog(this)
-            bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout_update)
+        //Call api to get current app version
+        val thread = Thread {
+            try {
+                val versionCode = BuildConfig.VERSION_CODE
+                val json = Request().run("http://exxxpose-extend.bplaced.net/api/getCurrentAppVersion/")
 
+                val result = Klaxon()
+                    .parse<Data>(json)
 
-            bottomSheetDialog.findViewById<LinearLayout>(R.id.getTheUpdate)
-                ?.setOnClickListener(View.OnClickListener {
-                    val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/exxxposeApp/exxxpose-Android"))
-                    startActivity(browserIntent)
-                    bottomSheetDialog.dismiss()
-                })
+                if (result != null) {
+                    if(result.version != versionCode.toString()){
+                        isUpdateAvailible = true
+                    }
+                }
 
-            bottomSheetDialog.findViewById<LinearLayout>(R.id.Dismiss)
-                ?.setOnClickListener(View.OnClickListener {
-                    bottomSheetDialog.dismiss()
-                })
-
-
-            bottomSheetDialog.show()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Snackbar("Error: $e")
+            }
         }
+
+        thread.start()
+
+        //Check if a update is available
+        Handler(Looper.getMainLooper()).postDelayed(
+            {
+               if(isUpdateAvailible){
+                   showUpdatePopup()
+               }
+            },
+            1000 // value in milliseconds
+        )
+
 
 
 
@@ -610,6 +628,28 @@ class Main : AppCompatActivity() {
             .setPositiveButton("Yes"
             ) { _, _ -> super@Main.onBackPressed() }.create().show()
     }
+
+    fun showUpdatePopup(){
+        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout_update)
+
+
+        bottomSheetDialog.findViewById<LinearLayout>(R.id.getTheUpdate)
+            ?.setOnClickListener(View.OnClickListener {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/exxxposeApp/exxxpose-Android"))
+                startActivity(browserIntent)
+                bottomSheetDialog.dismiss()
+            })
+
+        bottomSheetDialog.findViewById<LinearLayout>(R.id.Dismiss)
+            ?.setOnClickListener(View.OnClickListener {
+                bottomSheetDialog.dismiss()
+            })
+
+
+        bottomSheetDialog.show()
+    }
+
 
     fun loadViewer(url: String){
         if(url.startsWith("https://www.exxxpose.me/post/")){
