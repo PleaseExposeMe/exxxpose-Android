@@ -442,49 +442,46 @@ class Main : AppCompatActivity() {
         //Check Internet Connection
         val webViewhelper = WebViewHelper()
         if(webViewhelper.isOnline(applicationContext)){
-                //Load site
-                webview.loadUrl("https://www.exxxpose.me/")
+            //Load site
+            webview.loadUrl("https://www.exxxpose.me/")
+
+            //Show update popup
+
+            //Call api to get current app version
+            val thread = Thread {
+                try {
+                    val versionCode = BuildConfig.VERSION_CODE
+                    val json = Request().run("http://exxxpose-extend.bplaced.net/api/getCurrentAppVersion/")
+
+                    val result = Klaxon()
+                        .parse<Data>(json)
+
+                    if (result != null) {
+                        if(result.version != versionCode.toString()){
+                            isUpdateAvailible = true
+                        }
+                    }
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Snackbar("Error: $e")
+                }
+            }
+
+            thread.start()
+
+            //Check if a update is available
+            Handler(Looper.getMainLooper()).postDelayed(
+                {
+                    if(isUpdateAvailible){
+                        showUpdatePopup()
+                    }
+                },
+                1000 // value in milliseconds
+            )
         }else{
             webview.loadUrl("file:///android_asset/noconnection.html")
         }
-
-
-        //Show update popup
-
-        //Call api to get current app version
-        val thread = Thread {
-            try {
-                val versionCode = BuildConfig.VERSION_CODE
-                val json = Request().run("http://exxxpose-extend.bplaced.net/api/getCurrentAppVersion/")
-
-                val result = Klaxon()
-                    .parse<Data>(json)
-
-                if (result != null) {
-                    if(result.version != versionCode.toString()){
-                        isUpdateAvailible = true
-                    }
-                }
-
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Snackbar("Error: $e")
-            }
-        }
-
-        thread.start()
-
-        //Check if a update is available
-        Handler(Looper.getMainLooper()).postDelayed(
-            {
-               if(isUpdateAvailible){
-                   showUpdatePopup()
-               }
-            },
-            1000 // value in milliseconds
-        )
-
-
 
 
         //Floating btn
