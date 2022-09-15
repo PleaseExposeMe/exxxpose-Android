@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.sql.Time
@@ -17,9 +18,19 @@ import java.sql.Time
 class Bookmarks : AppCompatActivity() {
     val Link: MutableList<String> = ArrayList()
     val Title: MutableList<String> = ArrayList()
+    val Type: MutableList<String> = ArrayList()
+
+    val User: MutableList<String> = ArrayList()
+    val User_URL: MutableList<String> = ArrayList()
+
+    val Posts: MutableList<String> = ArrayList()
+    val Posts_URL: MutableList<String> = ArrayList()
+
     var delete = false
     var leaveTimeStemp =  System.currentTimeMillis()
     var postOpened = false
+
+    var currentSelectedBookmark = 0;
 
     @SuppressLint("Range")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,11 +56,23 @@ class Bookmarks : AppCompatActivity() {
         while (!cursor.isAfterLast) {
             Link.add(cursor.getString(cursor.getColumnIndex(SQLlite.LINK_COl)))
             Title.add(cursor.getString(cursor.getColumnIndex(SQLlite.TITLE_COL)))
+            Type.add(cursor.getString(cursor.getColumnIndex(SQLlite.Type_COL)))
             cursor.moveToNext();
         }
 
         // at last we close our cursor
         cursor.close()
+
+        //Sort profile and accounts
+        Title.forEachIndexed { index, element ->
+            if(Type[index] == "post"){
+                Posts.add(element)
+                Posts_URL.add(Link[index])
+            }else{
+                User.add(element)
+                User_URL.add(Link[index])
+            }
+        }
 
         //Set data to RecyclerView
         // getting the recyclerview by its id
@@ -65,6 +88,7 @@ class Bookmarks : AppCompatActivity() {
             override fun onItemClick(position: Int){
 
                 if(delete){
+                    currentSelectedBookmark = position
                     deleteBookmark(position)
                 }else{
                     loadViewer(Link[position])
@@ -124,6 +148,7 @@ class Bookmarks : AppCompatActivity() {
         while (!cursor.isAfterLast) {
             Link.add(cursor.getString(cursor.getColumnIndex(SQLlite.LINK_COl)))
             Title.add(cursor.getString(cursor.getColumnIndex(SQLlite.TITLE_COL)))
+            Type.add(cursor.getString(cursor.getColumnIndex(SQLlite.Type_COL)))
             cursor.moveToNext();
         }
 
@@ -180,6 +205,7 @@ class Bookmarks : AppCompatActivity() {
         val difference = System.currentTimeMillis() - leaveTimeStemp
         if(difference < 250 && postOpened){
             Toast("Post is expired ")
+            val recyclerview = findViewById<RecyclerView>(R.id.bookmarkView)
         }
         postOpened = false
     }

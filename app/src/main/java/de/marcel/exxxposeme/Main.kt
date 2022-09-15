@@ -21,10 +21,12 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.webkit.*
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
@@ -46,6 +48,7 @@ class Main : AppCompatActivity() {
     var postOpened = false
     var disableOnClickEvents = false
     var isUpdateAvailible = false
+    var messageNotification = false;
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -105,15 +108,19 @@ class Main : AppCompatActivity() {
         class MyJavaScriptInterface() {
             @JavascriptInterface
             fun checkNotification(notificationState: Boolean) {
+                val badge = bottomNavigationView.getOrCreateBadge(R.id.notifications)
                 if(notificationState){
-                    val badge = bottomNavigationView.getOrCreateBadge(R.id.notifications)
                     badge.isVisible = true
                     badge.backgroundColor = ContextCompat.getColor(applicationContext, R.color.main_green)
                 }else{
-                    val badge = bottomNavigationView.getOrCreateBadge(R.id.notifications)
                     badge.isVisible = false
                 }
             }
+            @JavascriptInterface
+            fun updateMessagesBadge(notificationState: Boolean) {
+                messageNotification = notificationState
+            }
+
         }
 
         webview.addJavascriptInterface(MyJavaScriptInterface(), "INTERFACE");
@@ -322,21 +329,18 @@ class Main : AppCompatActivity() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
 
                 webview.visibility = View.INVISIBLE;
-                //JavaScript/CSS injection
-                val css = "html{-webkit-tap-highlight-color: transparent;}" //your css as String
-                val js = "var style = document.createElement('style'); style.innerHTML = '$css'; " +
-                        "document.getElementsByClassName('menu-item-icon')[3].style.display = 'none';" +
-                        "document.getElementsByClassName('menu-item-profile')[1].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[0].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[1].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[2].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[5].style.display = 'none';" +
+
+                //JavaScript/CSS injection mobile header
+                val cssHeader = "main{padding-top: 20px !important;} .mobile-grid-container{margin-top: -20px !important;}" //your css as String
+                val jsHeader = "var style = document.createElement('style'); style.innerHTML = '$cssHeader'; " +
+                        "document.getElementsByClassName('header-mobile')[0].style.display = 'none';" +
                         "document.head.appendChild(style);"
                 webview.loadUrl(
                     "javascript:(function() {"
-                            + js +
+                            + jsHeader +
                             "})()"
                 )
+
                 super.onPageStarted(view, url, favicon)
             }
 
@@ -345,19 +349,15 @@ class Main : AppCompatActivity() {
                 //Save cookies for login and popup
                 CookieManager.getInstance().flush()
 
-                //JavaScript/CSS injection
-                val css = "html{-webkit-tap-highlight-color: transparent;}" //your css as String
-                val js = "var style = document.createElement('style'); style.innerHTML = '$css'; " +
-                        "document.getElementsByClassName('menu-item-icon')[3].style.display = 'none';" +
-                        "document.getElementsByClassName('menu-item-profile')[1].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[0].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[1].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[2].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[5].style.display = 'none';" +
+
+                //JavaScript/CSS injection mobile header
+                val cssHeader = "html{-webkit-tap-highlight-color: transparent;} main{padding-top: 20px !important;} .mobile-grid-container{margin-top: -20px !important;}" //your css as String
+                val jsHeader = "var style = document.createElement('style'); style.innerHTML = '$cssHeader'; " +
+                        "document.getElementsByClassName('header-mobile')[0].style.display = 'none';" +
                         "document.head.appendChild(style);"
                 webview.loadUrl(
                     "javascript:(function() {"
-                            + js +
+                            + jsHeader +
                             "})()"
                 )
 
@@ -368,7 +368,13 @@ class Main : AppCompatActivity() {
                         "if(notificationIcon.includes('<span class=\"notification-bubble\">')){" +
                         "notificationState = true;" +
                         "}" +
-                        "window.INTERFACE.checkNotification(notificationState);")
+                        "window.INTERFACE.checkNotification(notificationState);" +
+                        "var messageState = false;" +
+                        "var messageIcon = document.getElementsByClassName('menu-item-icon')[2].innerHTML;" +
+                        "if(messageIcon.includes('<span class=\"notification-bubble\">')){" +
+                        "messageState = true;" +
+                        "}" +
+                        "window.INTERFACE.updateMessagesBadge(messageState);")
 
 
                 val fab = findViewById<FloatingActionButton>(R.id.floating_action_button)
@@ -380,9 +386,16 @@ class Main : AppCompatActivity() {
 
                 Handler(Looper.getMainLooper()).postDelayed(
                     {
-                        webview.visibility = View.VISIBLE;
+                        webview.visibility = View.VISIBLE
                     },
                     100 // value in milliseconds
+                )
+
+                Handler(Looper.getMainLooper()).postDelayed(
+                    {
+                        updateMessageBadgeVisibility(messageNotification)
+                    },
+                    1000 // value in milliseconds
                 )
                 super.onPageFinished(webView, url)
             }
@@ -464,7 +477,6 @@ class Main : AppCompatActivity() {
 
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    Snackbar("Error: $e")
                 }
             }
 
@@ -496,6 +508,22 @@ class Main : AppCompatActivity() {
             }
         }
 
+
+        //AppBar Buttons
+        val searchbtn = findViewById<ImageView>(R.id.searchbtn)
+        searchbtn.setOnClickListener {
+           loadViewer("https://www.exxxpose.me/search/");
+        }
+        val messagesbtn = findViewById<ImageView>(R.id.messagesbtn)
+        messagesbtn.setOnClickListener {
+            loadViewer("https://www.exxxpose.me/messages/");
+        }
+        val usersbtn = findViewById<ImageView>(R.id.usersbtn)
+        usersbtn.setOnClickListener {
+            loadViewer("https://www.exxxpose.me/users/");
+        }
+
+        updateMessageBadgeVisibility(false)
 
         //Bottom Navigation
         bottomNavigationView.setOnItemSelectedListener  { item ->
@@ -646,6 +674,19 @@ class Main : AppCompatActivity() {
 
         bottomSheetDialog.show()
     }
+
+
+    //Badge
+
+    fun updateMessageBadgeVisibility(msgState: Boolean){
+        val badge = findViewById<ImageView>(R.id.messagesBadge)
+        if(msgState){
+            badge.visibility = View.VISIBLE;
+        }else{
+            badge.visibility = View.GONE;
+        }
+    }
+
 
 
     fun loadViewer(url: String){

@@ -535,7 +535,12 @@ class Viewer : AppCompatActivity() {
 
                     bookmarkRemoved()
                 }else{
-                    db.addBookmark(url,title)
+                    if (url.startsWith("https://www.exxxpose.me/post/")){
+                        db.addBookmark(url,title,"post")
+                    }else{
+                        db.addBookmark(url,title,"profile")
+                    }
+
                     bookmarkBtnState = true
 
                     bookmarkAdded()
