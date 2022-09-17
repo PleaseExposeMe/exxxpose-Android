@@ -159,6 +159,9 @@ class Main : AppCompatActivity() {
                 if (url == "https://www.exxxpose.me/me/") {
                     bottomNavigationView.selectedItemId = R.id.account
                 } else
+                if (url == "https://www.exxxpose.me/search/") {
+                    bottomNavigationView.selectedItemId = R.id.search
+                } else
                 if (url == "https://www.exxxpose.me/notifications/") {
                     bottomNavigationView.selectedItemId = R.id.notifications;
                 }else
@@ -510,17 +513,9 @@ class Main : AppCompatActivity() {
 
 
         //AppBar Buttons
-        val searchbtn = findViewById<ImageView>(R.id.searchbtn)
-        searchbtn.setOnClickListener {
-           loadViewer("https://www.exxxpose.me/search/");
-        }
         val messagesbtn = findViewById<ImageView>(R.id.messagesbtn)
         messagesbtn.setOnClickListener {
             loadViewer("https://www.exxxpose.me/messages/");
-        }
-        val usersbtn = findViewById<ImageView>(R.id.usersbtn)
-        usersbtn.setOnClickListener {
-            loadViewer("https://www.exxxpose.me/users/");
         }
 
         updateMessageBadgeVisibility(false)
@@ -558,6 +553,18 @@ class Main : AppCompatActivity() {
                         if(webViewhelper.isOnline(applicationContext)){
                             //Load site
                             webview.loadUrl("https://www.exxxpose.me/me/")
+                        }else{
+                            webview.loadUrl("file:///android_asset/noconnection.html")
+                        }
+                    }
+                    true
+                }
+                R.id.search -> {
+                    if(!disableOnClickEvents){
+                        //Check Internet Connection
+                        if(webViewhelper.isOnline(applicationContext)){
+                            //Load site
+                            webview.loadUrl("https://www.exxxpose.me/search/")
                         }else{
                             webview.loadUrl("file:///android_asset/noconnection.html")
                         }
@@ -633,6 +640,11 @@ class Main : AppCompatActivity() {
                 val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
                 disableOnClickEvents = true
                 bottomNavigationView.selectedItemId = R.id.games
+                disableOnClickEvents = false
+            }else  if(url == "https://www.exxxpose.me/search/"){
+                val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+                disableOnClickEvents = true
+                bottomNavigationView.selectedItemId = R.id.search
                 disableOnClickEvents = false
             }
         }

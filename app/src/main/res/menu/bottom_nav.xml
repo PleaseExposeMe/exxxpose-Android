@@ -8,15 +8,20 @@
         android:enabled="true"
         android:title="@string/home" />
     <item
-        android:id="@+id/notifications"
-        android:icon="@drawable/notifications_24"
-        android:enabled="true"
-        android:title="@string/notifications" />
-    <item
         android:id="@+id/games"
         android:enabled="true"
         android:icon="@drawable/games_24"
         android:title="@string/games" />
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/search_24"
+        android:enabled="true"
+        android:title="@string/search" />
+    <item
+        android:id="@+id/notifications"
+        android:icon="@drawable/notifications_24"
+        android:enabled="true"
+        android:title="@string/notifications" />
     <item
         android:id="@+id/account"
         android:icon="@drawable/account_circle_24"

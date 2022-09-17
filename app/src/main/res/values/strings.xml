@@ -4,5 +4,6 @@
     <string name="notifications">Notifications</string>
     <string name="account">Me</string>
     <string name="upload">Upload</string>
+    <string name="search">Search</string>
     <string name="games">Games</string>
 </resources>
