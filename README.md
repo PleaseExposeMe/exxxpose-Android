@@ -14,10 +14,10 @@ No! If you don't trust the app, you can always look at the source code
 ### How do I install the app?
 [Instruction](https://www.verizon.com/support/knowledge-base-222186/)\
 [Instruction Video](https://www.youtube.com/watch?v=KC4fe035egI)
-### Is this a official app from exxxpose.me
-No... the app is unofficial and I hope they don't have a problem with me using their logo. 😅
 
 Under certain circumstances, the process may be different on your Android device. Just search for "[Your phone manufacturer] how to install apps from unknows sources" on Google
+### Is this a official app from exxxpose.me
+No... the app is unofficial and I hope they don't have a problem with me using their logo. 😅
 
 # Screenshots
 
