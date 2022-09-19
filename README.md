@@ -1,4 +1,4 @@
-# Android app for exxxpose.me
+# Android app for exxxpose.me (NSFW)
 An unofficial app for exxxpose.me for Android
 
 # Download
@@ -14,12 +14,10 @@ No! If you don't trust the app, you can always look at the source code
 ### How do I install the app?
 [Instruction](https://www.verizon.com/support/knowledge-base-222186/)\
 [Instruction Video](https://www.youtube.com/watch?v=KC4fe035egI)
+### Is this a official app from exxxpose.me
+No... the app is unofficial and I hope they don't have a problem with me using their logo. 😅
 
 Under certain circumstances, the process may be different on your Android device. Just search for "[Your phone manufacturer] how to install apps from unknows sources" on Google
-
-# What is exxxpose.me?
-exxxpose.me is an adult picture posting site.\
-This site is meant for the male exposure community.
 
 # Screenshots
 
@@ -64,6 +62,10 @@ This site is meant for the male exposure community.
 </tbody>
 </table>
 
+# What is exxxpose.me?
+exxxpose.me is an adult picture posting site.\
+This site is meant for the male exposure community.
+
 # Contact
 
 [ExposeMeNowMarcel@outlook.de](mailto:ExposeMeNowMarcel@outlook.de)
@@ -84,3 +86,6 @@ This site is meant for the male exposure community.
    limitations under the License.
    
    ### Use and share the app like the boys 😏
+   
+# Copyright/Trademark Information. 
+All trademarks, logos and service marks are Copyright ©2022 by exxxpose.me
