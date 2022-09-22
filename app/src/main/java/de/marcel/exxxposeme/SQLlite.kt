@@ -1,10 +1,13 @@
 package de.marcel.exxxposeme
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SQLlite(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION) {
@@ -13,21 +16,28 @@ class SQLlite(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         override fun onCreate(db: SQLiteDatabase) {
             // below is a sqlite query, where column names
             // along with their data types is given
-            val query = ("CREATE TABLE " + TABLE_NAME + " ("
+            val query = ("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                     + ID_COL + " INTEGER PRIMARY KEY, " +
                     LINK_COl + " TEXT," +
                     TITLE_COL + " TEXT," +
                     Type_COL + " TEXT," +
                     State_COL + " TEXT" + ")")
 
-            // we are calling sqlite
-            // method for executing our query
+            val queryForHistory = ("CREATE TABLE IF NOT EXISTS " + TABLE_NAME_History + " ("
+                    + ID_COL + " INTEGER PRIMARY KEY, " +
+                    LINK_COl + " TEXT," +
+                    TITLE_COL + " TEXT," +
+                    Date + " Text" + ")")
+
+
             db.execSQL(query)
+            db.execSQL(queryForHistory)
         }
 
         override fun onUpgrade(db: SQLiteDatabase, p1: Int, p2: Int) {
             // this method is to check if table already exists
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_History)
             onCreate(db)
         }
 
@@ -50,7 +60,7 @@ class SQLlite(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             // our database as we want to
             // insert value in our database
             val db = this.writableDatabase
-
+            onCreate(db)
             // all values are inserted into database
             db.insert(TABLE_NAME, null, values)
 
@@ -67,7 +77,7 @@ class SQLlite(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             // variable of our database
             // as we want to read value from it
             val db = this.readableDatabase
-
+            onCreate(db)
             // below code returns a cursor to
             // read data from the database
             return db.rawQuery("SELECT * FROM " + TABLE_NAME, null)
@@ -80,7 +90,7 @@ class SQLlite(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // variable of our database
         // as we want to read value from it
         val db = this.readableDatabase
-
+        onCreate(db)
         // below code returns a cursor to
         // read data from the database
         return db.rawQuery("Update " + TABLE_NAME + " SET " + State_COL + " = 'expired' WHERE " + LINK_COl + "= '" + link + "'", null)
@@ -97,24 +107,81 @@ class SQLlite(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // variable of our database
         // as we want to read value from it
         val db = this.readableDatabase
-
+        onCreate(db)
         // below code returns a cursor to
         // read data from the database
        // db.delete("DELETE * FROM " + TABLE_NAME,"WHERE link=gf")
         db.execSQL("DELETE FROM " + TABLE_NAME + " WHERE " + LINK_COl + "= '" + link + "'");
     }
 
+
+    //History
+
+    // This method is for adding data in our database
+    @SuppressLint("SimpleDateFormat")
+    fun addHistoryEntry(Link : String, Title : String ){
+
+        // below we are creating
+        // a content values variable
+        val values = ContentValues()
+
+        val sdf = SimpleDateFormat("dd.M.yyyy")
+        val currentDate = sdf.format(Date())
+
+        // we are inserting our values
+        // in the form of key-value pair
+        values.put(LINK_COl, Link)
+        values.put(TITLE_COL, Title)
+        values.put(Date, currentDate)
+
+        // here we are creating a
+        // writable variable of
+        // our database as we want to
+        // insert value in our database
+        val db = this.writableDatabase
+        onCreate(db)
+        // all values are inserted into database
+        db.insert(TABLE_NAME_History, null, values)
+
+        // at last we are
+        // closing our database
+        db.close()
+    }
+
+    // below method is to get
+    // all data from our database
+    fun getHistory(): Cursor? {
+
+        // here we are creating a readable
+        // variable of our database
+        // as we want to read value from it
+        val db = this.readableDatabase
+        onCreate(db)
+        // below code returns a cursor to
+        // read data from the database
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME_History + " ORDER BY id DESC", null)
+
+    }
+
+    fun deleteHistory(){
+        val db = this.readableDatabase
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_History)
+        onCreate(db)
+    }
+
         companion object{
             // here we have defined variables for our database
 
             // below is variable for database name
-            private val DATABASE_NAME = "bookmarks"
+            private val DATABASE_NAME = "exxxpose"
 
             // below is the variable for database version
             private val DATABASE_VERSION = 1
 
             // below is the variable for table name
-            val TABLE_NAME = "gfg_table"
+            val TABLE_NAME = "exxxpose_bookmarks"
+
+            val TABLE_NAME_History = "exxxpose_history"
 
             // below is the variable for id column
             val ID_COL = "id"
@@ -128,6 +195,8 @@ class SQLlite(context: Context, factory: SQLiteDatabase.CursorFactory?) :
             val Type_COL = "type"
 
             val State_COL = "state"
+
+            val Date = "date"
         }
 
 }

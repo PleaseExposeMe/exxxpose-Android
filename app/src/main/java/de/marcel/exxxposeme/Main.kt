@@ -19,6 +19,8 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
+import android.transition.Transition
+import android.transition.TransitionManager
 import android.view.View
 import android.webkit.*
 import android.widget.ImageView
@@ -26,7 +28,6 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.webkit.WebSettingsCompat
 import androidx.webkit.WebViewFeature
@@ -380,11 +381,11 @@ class Main : AppCompatActivity() {
                         "window.INTERFACE.updateMessagesBadge(messageState);")
 
 
-                val fab = findViewById<FloatingActionButton>(R.id.floating_action_button)
+                val menu = findViewById<ImageView>(R.id.menu)
                 if (url == "https://www.exxxpose.me/me/") {
-                    fab.setImageResource(R.drawable.bookmarks_24)
+                    menu.visibility = View.VISIBLE
                 }else{
-                    fab.setImageResource(R.drawable.add_24)
+                    menu.visibility = View.GONE
                 }
 
                 Handler(Looper.getMainLooper()).postDelayed(
@@ -502,13 +503,7 @@ class Main : AppCompatActivity() {
         //Floating btn
         val fab = findViewById<FloatingActionButton>(R.id.floating_action_button)
         fab.setOnClickListener {
-            if (webview.url == "https://www.exxxpose.me/me/") {
-                val intent = Intent(this, Bookmarks::class.java)
-                startActivity(intent)
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-            }else{
                 loadViewer("https://www.exxxpose.me/upload")
-            }
         }
 
 
@@ -516,6 +511,32 @@ class Main : AppCompatActivity() {
         val messagesbtn = findViewById<ImageView>(R.id.messagesbtn)
         messagesbtn.setOnClickListener {
             loadViewer("https://www.exxxpose.me/messages/");
+        }
+
+        val menubtn = findViewById<ImageView>(R.id.menu)
+        menubtn.setOnClickListener {
+            val bottomSheetDialog = BottomSheetDialog(this)
+            bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_menu_layout)
+
+
+            bottomSheetDialog.findViewById<LinearLayout>(R.id.bookmarks)
+                ?.setOnClickListener(View.OnClickListener {
+                    val intent = Intent(this, Bookmarks::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    bottomSheetDialog.dismiss()
+                })
+
+            bottomSheetDialog.findViewById<LinearLayout>(R.id.history)
+                ?.setOnClickListener(View.OnClickListener {
+                    val intent = Intent(this, History::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    bottomSheetDialog.dismiss()
+                })
+
+
+            bottomSheetDialog.show()
         }
 
         updateMessageBadgeVisibility(false)
@@ -604,7 +625,7 @@ class Main : AppCompatActivity() {
 
         val url = webview.url
 
-        if (url == "https://www.exxxpose.me/me/") {
+        if (url == "https://www.exxxpose.me/me/" || url == "https://www.exxxpose.me/notifications/") {
             webview.visibility = View.INVISIBLE;
             webview.reload();
             Handler(Looper.getMainLooper()).postDelayed(

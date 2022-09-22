@@ -5,17 +5,25 @@
       <map>
         <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/drawable/arrow_back_24.xml" value="0.2655" />
         <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/drawable/badge.xml" value="0.2655" />
+        <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/drawable/bookmark_24_green.xml" value="0.2655" />
         <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/drawable/bookmarks_24.xml" value="0.2655" />
+        <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/drawable/history_24.xml" value="0.2655" />
+        <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/drawable/import_export_24.xml" value="0.1595" />
+        <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/drawable/menu_24.xml" value="0.2655" />
         <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/drawable/message_24.xml" value="0.2655" />
         <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/drawable/person_search_24.xml" value="0.2655" />
+        <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/drawable/rounded_dialog.xml" value="0.196" />
         <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/drawable/search_24.xml" value="0.2655" />
         <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/drawable/update_24.xml" value="0.2655" />
-        <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/layout/activity_bookmarks.xml" value="0.24114583333333334" />
+        <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/layout/activity_bookmarks.xml" value="0.22" />
+        <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/layout/activity_history.xml" value="0.1" />
         <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/layout/activity_main.xml" value="0.28442028985507245" />
-        <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/layout/activity_main_home.xml" value="0.33" />
+        <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/layout/activity_main_home.xml" value="1.0" />
         <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/layout/activity_new_update_available_view.xml" value="0.28442028985507245" />
         <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/layout/activity_upload.xml" value="0.28442028985507245" />
+        <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/layout/bottom_sheet_dialog_layout.xml" value="0.28442028985507245" />
         <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/layout/bottom_sheet_dialog_layout_update.xml" value="0.25" />
+        <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/layout/bottom_sheet_dialog_menu_layout.xml" value="0.28442028985507245" />
         <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/layout/text_row_item.xml" value="0.24114583333333334" />
         <entry key="..\:/Users/Marcel/Documents/GitHub/exxxpose-Android/app/src/main/res/menu/bottom_nav.xml" value="0.36666666666666664" />
       </map>

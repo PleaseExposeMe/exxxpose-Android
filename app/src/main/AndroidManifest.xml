@@ -19,6 +19,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".History"
+            android:exported="false" />
+        <activity
             android:name=".Bookmarks"
             android:exported="false" />
         <activity
@@ -30,8 +33,7 @@
             android:name=".Main"
             android:exported="false"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" >
-        </activity>
+            tools:ignore="LockedOrientationActivity"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="true"

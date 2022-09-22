@@ -38,7 +38,7 @@ class Viewer : AppCompatActivity() {
     var uploadMessage: ValueCallback<Array<Uri>>? = null
     val REQUEST_SELECT_FILE = 100
     var firstLoad = true
-    var title = ""
+    var title = "No title"
     val Link: MutableList<String> = ArrayList()
     var bookmarkBtnState = false
     var leaveTimeStemp =  System.currentTimeMillis()
@@ -413,6 +413,17 @@ class Viewer : AppCompatActivity() {
                 //Js Interface
                 if (url?.startsWith("https://www.exxxpose.me/profile/") == true || url?.startsWith("https://www.exxxpose.me/post/") == true) {
                     webview.loadUrl("javascript:window.INTERFACE.setTitle(document.getElementsByTagName('h1')[0].innerText);");
+                }
+
+                if (url?.startsWith("https://www.exxxpose.me/post/") == true && url?.contains("report.php") != true && url?.contains("delete.php") != true || url?.startsWith("https://www.exxxpose.me/profile/") == true) {
+                    Handler(Looper.getMainLooper()).postDelayed(
+                        {
+                            //New history entry
+                            val history = SQLlite(applicationContext, null)
+                            history.addHistoryEntry(url,title)
+                        },
+                        600 // value in milliseconds
+                    )
                 }
 
                 Handler(Looper.getMainLooper()).postDelayed(

@@ -3,39 +3,32 @@ package de.marcel.exxxposeme
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 
-class Bookmarks : AppCompatActivity() {
+class History : AppCompatActivity() {
     val Link: MutableList<String> = ArrayList()
     val Title: MutableList<String> = ArrayList()
-    val Type: MutableList<String> = ArrayList()
+    val Date: MutableList<String> = ArrayList()
 
-    val User: MutableList<String> = ArrayList()
-    val User_URL: MutableList<String> = ArrayList()
-
-    val Posts: MutableList<String> = ArrayList()
-    val Posts_URL: MutableList<String> = ArrayList()
 
     var delete = false
     var leaveTimeStemp =  System.currentTimeMillis()
     var postOpened = false
 
     var currentSelectedBookmark = 0;
-
     @SuppressLint("Range")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_bookmarks)
+        setContentView(R.layout.activity_history)
+
 
         val db = SQLlite(this, null)
 
@@ -43,7 +36,7 @@ class Bookmarks : AppCompatActivity() {
         // we have called method to get
         // all names from our database
         // and add to name text view
-        val cursor = db.getBookmarks()
+        val cursor = db.getHistory()
 
         // moving the cursor to first position and
         // appending value in the text view
@@ -56,23 +49,12 @@ class Bookmarks : AppCompatActivity() {
         while (!cursor.isAfterLast) {
             Link.add(cursor.getString(cursor.getColumnIndex(SQLlite.LINK_COl)))
             Title.add(cursor.getString(cursor.getColumnIndex(SQLlite.TITLE_COL)))
-            Type.add(cursor.getString(cursor.getColumnIndex(SQLlite.Type_COL)))
+            Date.add(cursor.getString(cursor.getColumnIndex(SQLlite.Date)))
             cursor.moveToNext();
         }
 
         // at last we close our cursor
         cursor.close()
-
-        //Sort profile and accounts
-        Title.forEachIndexed { index, element ->
-            if(Type[index] == "post"){
-                Posts.add(element)
-                Posts_URL.add(Link[index])
-            }else{
-                User.add(element)
-                User_URL.add(Link[index])
-            }
-        }
 
         //Set data to RecyclerView
         // getting the recyclerview by its id
@@ -89,7 +71,7 @@ class Bookmarks : AppCompatActivity() {
 
                 if(delete){
                     currentSelectedBookmark = position
-                    deleteBookmark(position)
+                    //deleteBookmark(position)
                 }else{
                     loadViewer(Link[position])
                 }
@@ -99,42 +81,16 @@ class Bookmarks : AppCompatActivity() {
         // Setting the Adapter with the recyclerview
         recyclerview.adapter = adapter
 
-
-
-        //TODO: Remove bookmark on longclick
+        val deleteBtn = findViewById<ImageView>(R.id.delete)
+        deleteBtn.setOnClickListener {
+            deleteHistory()
+        }
 
         //close btn
         val btn = findViewById<ImageView>(R.id.btn)
         btn.setOnClickListener {
-                finish()
+            finish()
         }
-
-        val deleteBtn = findViewById<ImageView>(R.id.delete)
-        deleteBtn.setOnClickListener {
-            val msg = findViewById<TextView>(R.id.msg)
-            if(delete){
-                delete = false
-                msg.visibility = View.GONE
-            }else{
-                delete = true
-                msg.visibility = View.VISIBLE
-            }
-        }
-
-        val export = findViewById<ImageView>(R.id.export)
-        export.setOnClickListener {
-            var exportStr = ""
-            Link.forEachIndexed { index, element ->
-                Title[index]
-                exportStr += element +"\n" + " - " + Title[index]
-            }
-            val i = Intent(Intent.ACTION_SEND)
-            i.type = "text/plain"
-            i.putExtra(Intent.EXTRA_SUBJECT, "Export Bookmarks")
-            i.putExtra(Intent.EXTRA_TEXT, exportStr)
-            startActivity(Intent.createChooser(i, "Export Bookmarks"))
-        }
-
     }
 
     @SuppressLint("Range")
@@ -149,7 +105,7 @@ class Bookmarks : AppCompatActivity() {
         // we have called method to get
         // all names from our database
         // and add to name text view
-        val cursor = db.getBookmarks()
+        val cursor = db.getHistory()
 
         // moving the cursor to first position and
         // appending value in the text view
@@ -161,8 +117,8 @@ class Bookmarks : AppCompatActivity() {
         cursor.moveToFirst();
         while (!cursor.isAfterLast) {
             Link.add(cursor.getString(cursor.getColumnIndex(SQLlite.LINK_COl)))
-            Title.add(cursor.getString(cursor.getColumnIndex(SQLlite.TITLE_COL)))
-            Type.add(cursor.getString(cursor.getColumnIndex(SQLlite.Type_COL)))
+            Title.add(cursor.getString(cursor.getColumnIndex(SQLlite.TITLE_COL)) + " (" + cursor.getString(cursor.getColumnIndex(SQLlite.Date)) + ")")
+            Date.add(cursor.getString(cursor.getColumnIndex(SQLlite.Date)))
             cursor.moveToNext();
         }
 
@@ -181,23 +137,23 @@ class Bookmarks : AppCompatActivity() {
         val adapter = CustomAdapter(Title)
     }
 
-    fun deleteBookmark(position : Int){
+    fun deleteHistory(){
         val db = SQLlite(this, null)
         AlertDialog.Builder(this)
-            .setTitle("Are you sure you want to delete the bookmark " + Title[position] +"?")
+            .setTitle("Are you sure you want to delete the history?")
             .setNegativeButton("No", null)
             .setPositiveButton(
                 "Yes"
             ) { _, _ ->
-                db.deleteBookmark(Link[position])
+                db.deleteHistory()
                 updateRecycleView()
-                Toast("Bookmark deleted")
+                Toast("History deleted")
             }.create().show()
     }
 
     @SuppressLint("ResourceAsColor")
     fun Toast(message: String) {
-        val contextView = findViewById<View>(R.id.bookmarks)
+        val contextView = findViewById<View>(R.id.historyView)
         Snackbar.make(contextView, message, Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {
                 // Responds to click on the action
@@ -229,7 +185,7 @@ class Bookmarks : AppCompatActivity() {
             val recyclerview = findViewById<RecyclerView>(R.id.historyView)
         }
         postOpened = false
+        updateRecycleView()
     }
 
 }
-
