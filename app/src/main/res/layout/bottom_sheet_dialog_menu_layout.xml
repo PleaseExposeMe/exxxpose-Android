@@ -52,6 +52,16 @@
             android:text="History"
             android:textColor="?attr/black" />
 
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/rounded_red"
+            android:text="New"
+            android:textAlignment="center"
+            android:textColor="#ffffff" />
+
     </LinearLayout>
 
 
