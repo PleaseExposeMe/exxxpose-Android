@@ -10,8 +10,8 @@ android {
         applicationId "de.marcel.exxxposeme"
         minSdk 24
         targetSdk 32
-        versionCode 5
-        versionName "1.0.4.5"
+        versionCode 6
+        versionName "c"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
