@@ -38,11 +38,13 @@ class Viewer : AppCompatActivity() {
     var uploadMessage: ValueCallback<Array<Uri>>? = null
     val REQUEST_SELECT_FILE = 100
     var firstLoad = true
-    var title = "No title"
+    var title = ""
     val Link: MutableList<String> = ArrayList()
     var bookmarkBtnState = false
     var leaveTimeStemp =  System.currentTimeMillis()
     var postOpened = false
+
+    var disableHistory = false
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -419,8 +421,10 @@ class Viewer : AppCompatActivity() {
                     Handler(Looper.getMainLooper()).postDelayed(
                         {
                             //New history entry
-                            val history = SQLlite(applicationContext, null)
-                            history.addHistoryEntry(url,title)
+                            if(!disableHistory){
+                                val history = SQLlite(applicationContext, null)
+                                history.addHistoryEntry(url,title)
+                            }
                         },
                         600 // value in milliseconds
                     )
@@ -492,6 +496,17 @@ class Viewer : AppCompatActivity() {
 
         //get url from intent extra
         val url :String = intent.getStringExtra("url").toString()
+
+        var historyState: String
+        if (intent.hasExtra("history")) {
+            historyState = intent.getStringExtra("history").toString()
+        } else {
+            historyState = "true"
+        }
+
+        if(historyState=="false"){
+            disableHistory = true
+        }
 
         //Check Internet Connection
         val webViewhelper = WebViewHelper()

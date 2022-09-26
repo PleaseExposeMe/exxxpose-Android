@@ -64,9 +64,9 @@ class History : AppCompatActivity() {
         recyclerview.layoutManager = LinearLayoutManager(this)
 
         // This will pass the ArrayList to our Adapter
-        val adapter = CustomAdapter(Title)
+        val adapter = CustomAdapterHistory(Title, Date)
 
-        adapter.setOnItemClickListener(object : CustomAdapter.onItemClickListner{
+        adapter.setOnItemClickListener(object : CustomAdapterHistory.onItemClickListner{
             override fun onItemClick(position: Int){
 
                 if(delete){
@@ -117,7 +117,7 @@ class History : AppCompatActivity() {
         cursor.moveToFirst();
         while (!cursor.isAfterLast) {
             Link.add(cursor.getString(cursor.getColumnIndex(SQLlite.LINK_COl)))
-            Title.add(cursor.getString(cursor.getColumnIndex(SQLlite.TITLE_COL)) + " (" + cursor.getString(cursor.getColumnIndex(SQLlite.Date)) + ")")
+            Title.add(cursor.getString(cursor.getColumnIndex(SQLlite.TITLE_COL)))
             Date.add(cursor.getString(cursor.getColumnIndex(SQLlite.Date)))
             cursor.moveToNext();
         }
@@ -134,7 +134,7 @@ class History : AppCompatActivity() {
         recyclerview.layoutManager = LinearLayoutManager(this)
 
         // This will pass the ArrayList to our Adapter
-        val adapter = CustomAdapter(Title)
+        CustomAdapterHistory(Title, Date)
     }
 
     fun deleteHistory(){
@@ -170,6 +170,7 @@ class History : AppCompatActivity() {
         if(webViewhelper.isOnline(applicationContext)){
             val intent = Intent(this, Viewer::class.java)
             intent.putExtra("url", url)
+            intent.putExtra("history", "false")
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }else{
@@ -182,7 +183,6 @@ class History : AppCompatActivity() {
         val difference = System.currentTimeMillis() - leaveTimeStemp
         if(difference < 250 && postOpened){
             Toast("Post is expired ")
-            val recyclerview = findViewById<RecyclerView>(R.id.historyView)
         }
         postOpened = false
         updateRecycleView()

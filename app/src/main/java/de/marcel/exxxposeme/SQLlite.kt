@@ -121,31 +121,33 @@ class SQLlite(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     @SuppressLint("SimpleDateFormat")
     fun addHistoryEntry(Link : String, Title : String ){
 
-        // below we are creating
-        // a content values variable
-        val values = ContentValues()
+        if(Title!=""){
+            // below we are creating
+            // a content values variable
+            val values = ContentValues()
 
-        val sdf = SimpleDateFormat("dd.M.yyyy")
-        val currentDate = sdf.format(Date())
+            val sdf = SimpleDateFormat("dd.M.yyyy")
+            val currentDate = sdf.format(Date())
 
-        // we are inserting our values
-        // in the form of key-value pair
-        values.put(LINK_COl, Link)
-        values.put(TITLE_COL, Title)
-        values.put(Date, currentDate)
+            // we are inserting our values
+            // in the form of key-value pair
+            values.put(LINK_COl, Link)
+            values.put(TITLE_COL, Title)
+            values.put(Date, currentDate)
 
-        // here we are creating a
-        // writable variable of
-        // our database as we want to
-        // insert value in our database
-        val db = this.writableDatabase
-        onCreate(db)
-        // all values are inserted into database
-        db.insert(TABLE_NAME_History, null, values)
+            // here we are creating a
+            // writable variable of
+            // our database as we want to
+            // insert value in our database
+            val db = this.writableDatabase
+            onCreate(db)
+            // all values are inserted into database
+            db.insert(TABLE_NAME_History, null, values)
 
-        // at last we are
-        // closing our database
-        db.close()
+            // at last we are
+            // closing our database
+            db.close()
+        }
     }
 
     // below method is to get

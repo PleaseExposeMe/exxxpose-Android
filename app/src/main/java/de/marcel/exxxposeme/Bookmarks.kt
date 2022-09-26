@@ -30,7 +30,7 @@ class Bookmarks : AppCompatActivity() {
     var leaveTimeStemp =  System.currentTimeMillis()
     var postOpened = false
 
-    var currentSelectedBookmark = 0;
+    var currentSelectedBookmark = 0
 
     @SuppressLint("Range")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,7 +126,7 @@ class Bookmarks : AppCompatActivity() {
             var exportStr = ""
             Link.forEachIndexed { index, element ->
                 Title[index]
-                exportStr += element +"\n" + " - " + Title[index]
+                exportStr += element + " - " + Title[index] + "\n"
             }
             val i = Intent(Intent.ACTION_SEND)
             i.type = "text/plain"
