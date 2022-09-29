@@ -197,7 +197,7 @@ class Bookmarks : AppCompatActivity() {
 
     @SuppressLint("ResourceAsColor")
     fun Toast(message: String) {
-        val contextView = findViewById<View>(R.id.bookmarks)
+        val contextView = findViewById<View>(R.id.historyView)
         Snackbar.make(contextView, message, Snackbar.LENGTH_SHORT)
             .setAction("Dismiss") {
                 // Responds to click on the action
