@@ -19,12 +19,11 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import android.transition.Transition
-import android.transition.TransitionManager
 import android.view.View
 import android.webkit.*
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -49,7 +48,8 @@ class Main : AppCompatActivity() {
     var postOpened = false
     var disableOnClickEvents = false
     var isUpdateAvailible = false
-    var messageNotification = false;
+    var messageNotification = false
+    var urlBeforeError = ""
 
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
@@ -78,7 +78,11 @@ class Main : AppCompatActivity() {
 
         val refresh = findViewById<SwipeRefreshLayout>(R.id.swiperefresh)
         refresh.setOnRefreshListener {
-            webview.reload()
+            if(webview.url == "file:///android_asset/noconnection.html"){
+                webview.loadUrl(urlBeforeError)
+            }else{
+                webview.reload()
+            }
             refresh.isRefreshing = false
         }
 
@@ -95,8 +99,8 @@ class Main : AppCompatActivity() {
             Configuration.UI_MODE_NIGHT_YES -> {
                 if(WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
                     WebSettingsCompat.setForceDark(webview.settings, WebSettingsCompat.FORCE_DARK_ON);
-                    webview.setBackgroundColor(Color.parseColor("#212121"))
                 }
+                webview.setBackgroundColor(Color.parseColor("#212121"))
             }
             Configuration.UI_MODE_NIGHT_NO -> {}
             Configuration.UI_MODE_NIGHT_UNDEFINED -> {}
@@ -137,6 +141,17 @@ class Main : AppCompatActivity() {
                 handler.cancel()
             }
 
+            override fun onReceivedError(
+                view: WebView?,
+                errorCode: Int,
+                description: String?,
+                failingUrl: String?
+            ) {
+                updateURLBeforeError()
+                webview.loadUrl("file:///android_asset/noconnection.html")
+                super.onReceivedError(view, errorCode, description, failingUrl)
+            }
+
 
             @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
@@ -144,6 +159,7 @@ class Main : AppCompatActivity() {
                 //Check Internet Connection
                 val webViewhelper = WebViewHelper()
                 if(!webViewhelper.isOnline(applicationContext)){
+                    updateURLBeforeError()
                     webview.loadUrl("file:///android_asset/noconnection.html")
                     return false
                 }
@@ -331,6 +347,8 @@ class Main : AppCompatActivity() {
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                val progressBar = findViewById<ProgressBar>(R.id.progressBar)
+                progressBar.visibility = View.VISIBLE
 
                 webview.visibility = View.INVISIBLE;
 
@@ -344,6 +362,28 @@ class Main : AppCompatActivity() {
                             + jsHeader +
                             "})()"
                 )
+
+                if(url == "https://www.exxxpose.me/"){
+                    disableOnClickEvents = true
+                    bottomNavigationView.selectedItemId = R.id.home
+                    disableOnClickEvents = false
+                }else  if(url == "https://www.exxxpose.me/notifications/"){
+                    disableOnClickEvents = true
+                    bottomNavigationView.selectedItemId = R.id.notifications
+                    disableOnClickEvents = false
+                }else  if(url == "https://www.exxxpose.me/me/"){
+                    disableOnClickEvents = true
+                    bottomNavigationView.selectedItemId = R.id.account
+                    disableOnClickEvents = false
+                }else  if(url == "https://www.exxxpose.me/games/"){
+                    disableOnClickEvents = true
+                    bottomNavigationView.selectedItemId = R.id.games
+                    disableOnClickEvents = false
+                }else  if(url == "https://www.exxxpose.me/search/"){
+                    disableOnClickEvents = true
+                    bottomNavigationView.selectedItemId = R.id.search
+                    disableOnClickEvents = false
+                }
 
                 super.onPageStarted(view, url, favicon)
             }
@@ -390,6 +430,8 @@ class Main : AppCompatActivity() {
 
                 Handler(Looper.getMainLooper()).postDelayed(
                     {
+                        val progressBar = findViewById<ProgressBar>(R.id.progressBar)
+                        progressBar.visibility = View.INVISIBLE
                         webview.visibility = View.VISIBLE
                     },
                     100 // value in milliseconds
@@ -496,6 +538,7 @@ class Main : AppCompatActivity() {
                 1000 // value in milliseconds
             )
         }else{
+            updateURLBeforeError()
             webview.loadUrl("file:///android_asset/noconnection.html")
         }
 
@@ -551,6 +594,7 @@ class Main : AppCompatActivity() {
                             //Load site
                             webview.loadUrl("https://www.exxxpose.me/")
                         }else{
+                            updateURLBeforeError()
                             webview.loadUrl("file:///android_asset/noconnection.html")
                         }
                     }
@@ -563,6 +607,7 @@ class Main : AppCompatActivity() {
                             //Load site
                             webview.loadUrl("https://www.exxxpose.me/notifications/")
                         }else{
+                            updateURLBeforeError()
                             webview.loadUrl("file:///android_asset/noconnection.html")
                         }
                     }
@@ -575,6 +620,7 @@ class Main : AppCompatActivity() {
                             //Load site
                             webview.loadUrl("https://www.exxxpose.me/me/")
                         }else{
+                            updateURLBeforeError()
                             webview.loadUrl("file:///android_asset/noconnection.html")
                         }
                     }
@@ -587,6 +633,7 @@ class Main : AppCompatActivity() {
                             //Load site
                             webview.loadUrl("https://www.exxxpose.me/search/")
                         }else{
+                            updateURLBeforeError()
                             webview.loadUrl("file:///android_asset/noconnection.html")
                         }
                     }
@@ -599,6 +646,7 @@ class Main : AppCompatActivity() {
                             //Load site
                             webview.loadUrl("https://www.exxxpose.me/games/")
                         }else{
+                            updateURLBeforeError()
                             webview.loadUrl("file:///android_asset/noconnection.html")
                         }
                     }
@@ -720,6 +768,12 @@ class Main : AppCompatActivity() {
         }
     }
 
+    fun updateURLBeforeError(){
+        var webviewURL = webview.url.toString()
+        if(webviewURL != "file:///android_asset/noconnection.html"){
+            urlBeforeError = webviewURL
+        }
+    }
 
 
     fun loadViewer(url: String){

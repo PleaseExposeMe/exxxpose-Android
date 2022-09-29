@@ -43,7 +43,7 @@ class Viewer : AppCompatActivity() {
     var bookmarkBtnState = false
     var leaveTimeStemp =  System.currentTimeMillis()
     var postOpened = false
-
+    var urlBeforeError = ""
     var disableHistory = false
 
     @Deprecated("Deprecated in Java")
@@ -76,7 +76,11 @@ class Viewer : AppCompatActivity() {
 
         val refresh = findViewById<SwipeRefreshLayout>(R.id.swiperefresh)
         refresh.setOnRefreshListener {
-            webview.reload()
+            if(webview.url == "file:///android_asset/noconnection.html"){
+                webview.loadUrl(urlBeforeError)
+            }else{
+                webview.reload()
+            }
             refresh.isRefreshing = false
         }
 
@@ -85,8 +89,8 @@ class Viewer : AppCompatActivity() {
             Configuration.UI_MODE_NIGHT_YES -> {
                 if(WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
                     WebSettingsCompat.setForceDark(webview.settings, WebSettingsCompat.FORCE_DARK_ON);
-                    webview.setBackgroundColor(Color.parseColor("#515151"))
                 }
+                webview.setBackgroundColor(Color.parseColor("#212121"))
             }
             Configuration.UI_MODE_NIGHT_NO -> {
                 webview.setBackgroundColor(Color.parseColor("#f7f7f7"))
@@ -120,12 +124,25 @@ class Viewer : AppCompatActivity() {
                 handler.cancel()
             }
 
+            override fun onReceivedError(
+                view: WebView?,
+                errorCode: Int,
+                description: String?,
+                failingUrl: String?
+            ) {
+                updateURLBeforeError()
+                webview.loadUrl("file:///android_asset/noconnection.html")
+                super.onReceivedError(view, errorCode, description, failingUrl)
+            }
+
             @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
 
                 //Check Internet Connection
                 val webViewhelper = WebViewHelper()
                 if(!webViewhelper.isOnline(applicationContext)){
+                    updateURLBeforeError()
+                    webview.loadUrl("file:///android_asset/noconnection.html")
                     return false
                 }
 
@@ -514,6 +531,7 @@ class Viewer : AppCompatActivity() {
             //Load site
             webview.loadUrl(url)
         }else{
+            updateURLBeforeError()
             webview.loadUrl("file:///android_asset/noconnection.html")
         }
 
@@ -698,6 +716,13 @@ class Viewer : AppCompatActivity() {
        }
     }
 
+    fun updateURLBeforeError(){
+        var webviewURL = webview.url.toString()
+        if(webviewURL != "file:///android_asset/noconnection.html"){
+            urlBeforeError = webviewURL
+        }
+    }
+
     fun loadViewer(url: String){
 
         if(url.startsWith("https://www.exxxpose.me/post/")){
@@ -713,6 +738,7 @@ class Viewer : AppCompatActivity() {
             startActivity(intent)
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
         }else{
+            updateURLBeforeError()
             webview.loadUrl("file:///android_asset/noconnection.html")
         }
     }

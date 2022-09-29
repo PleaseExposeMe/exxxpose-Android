@@ -90,5 +90,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/swiperefresh"
         app:layout_constraintEnd_toEndOf="@+id/swiperefresh"
         app:layout_constraintStart_toStartOf="@+id/swiperefresh"
-        app:layout_constraintTop_toTopOf="@+id/swiperefresh" />
+        app:layout_constraintTop_toTopOf="@+id/swiperefresh"
+        tools:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
