@@ -19,6 +19,15 @@ Under certain circumstances, the process may be different on your Android device
 ### Is this a official app from exxxpose.me
 No... the app is unofficial and I hope they don't have a problem with me using their logo. 😅
 
+# Features
+The most important functions:
+<ul>
+<li>All important functions and features of exxxpose.me</li>
+<li>Bookmarks</li>
+<li>History</li>
+<li>Improved navigation than the mobile browser version</li>
+</ul>
+
 # Screenshots
 
 <table class="tg">
