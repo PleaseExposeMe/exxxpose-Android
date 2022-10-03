@@ -320,26 +320,13 @@ class Viewer : AppCompatActivity() {
                 val progressBar = findViewById<ProgressBar>(R.id.progressBar)
                 progressBar.visibility = View.VISIBLE
                 webview.visibility = View.INVISIBLE
-                //JavaScript/CSS injection
-                val css = "html{-webkit-tap-highlight-color: transparent;}" //your css as String
-                val js = "var style = document.createElement('style'); style.innerHTML = '$css'; " +
-                        "document.getElementsByClassName('menu-item-icon')[2].style.display = 'none';" +
-                        "document.getElementsByClassName('menu-item-icon')[3].style.display = 'none';" +
-                        "document.getElementsByClassName('menu-item-profile')[1].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[0].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[1].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[2].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[5].style.display = 'none';" +
-                        "document.head.appendChild(style);"
-                webview.loadUrl(
-                    "javascript:(function() {"
-                            + js +
-                            "})()"
-                )
 
                 //JavaScript/CSS injection mobile header
-                val jsHeader = "document.getElementsByClassName('header-mobile')[0].style.display = 'none';" +
-                        "document.getElementsByTagName('footer')[0].style.display = 'none';"
+                val cssHeader = "html{-webkit-tap-highlight-color: transparent;} main{padding-top: 20px !important;} .mobile-grid-container{margin-top: -20px !important;}" //your css as String
+                val jsHeader = "var style = document.createElement('style'); style.innerHTML = '$cssHeader'; " +
+                        "document.getElementsByClassName('header-mobile')[0].style.display = 'none';" +
+                        "document.getElementsByTagName('footer')[0].style.display = 'none';" +
+                        "document.head.appendChild(style);"
                 webview.loadUrl(
                     "javascript:(function() {"
                             + jsHeader +
@@ -353,25 +340,10 @@ class Viewer : AppCompatActivity() {
                 //Save cookies for login and popup
                 CookieManager.getInstance().flush()
 
-                //JavaScript/CSS injection
-                val css = "html{-webkit-tap-highlight-color: transparent;}" //your css as String
-                val js = "var style = document.createElement('style'); style.innerHTML = '$css'; " +
-                        "document.getElementsByClassName('menu-item-icon')[2].style.display = 'none';" +
-                        "document.getElementsByClassName('menu-item-icon')[3].style.display = 'none';" +
-                        "document.getElementsByClassName('menu-item-profile')[1].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[0].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[1].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[2].style.display = 'none';" +
-                        "document.getElementsByClassName('mobile-menu-item')[5].style.display = 'none';" +
-                        "document.head.appendChild(style);"
-                webview.loadUrl(
-                    "javascript:(function() {"
-                            + js +
-                            "})()"
-                )
+                //JavaScript/CSS injection mobile header
+                val cssHeader = "html{-webkit-tap-highlight-color: transparent;} main{padding-top: 20px !important;} .mobile-grid-container{margin-top: -20px !important;}" //your css as String
 
                 //JavaScript/CSS injection mobile header
-                val cssHeader = "main{padding-top: 20px !important;}" //your css as String
                 val jsHeader = "var style = document.createElement('style'); style.innerHTML = '$cssHeader'; " +
                         "document.getElementsByClassName('header-mobile')[0].style.display = 'none';" +
                         "document.getElementsByTagName('footer')[0].style.display = 'none';" +
@@ -384,7 +356,19 @@ class Viewer : AppCompatActivity() {
 
                 if(url?.startsWith("https://www.exxxpose.me/messages/") == true){
                     //JavaScript/CSS messages
-                    val cssMessages = ".header-mobile{display: none;} .mobile-box{top: 60px !important;height: calc(100% - 60px)!important;}.message-headers{top: 0px !important;}.message-headers{width: calc(100% - 40px)!important;} .message-headers span a{display: none !important;} .message-text-content{ height: calc(100% - 92px) !important; position: fixed !important; bottom: 0 !important; top: 0 !important; }" //your css as String
+                    val cssMessages = ".header-mobile{display: none;} .mobile-box{top: 60px !important;height: calc(100% - 60px)!important;}.message-headers{top: 0px !important;}.message-headers{width: calc(100% - 40px)!important;} .message-headers span a{display: none !important;} .message-text-content{ height: calc(100% - 92px) !important; position: fixed !important; bottom: 0 !important; top: 0 !important; } .disclaimer{margin-top: -20px !important;position: absolute !important; bottom: 60px !important;}" //your css as String
+                    val jsMessages = "var style = document.createElement('style'); style.innerHTML = '$cssMessages'; " +
+                            "document.head.appendChild(style);"
+                    webview.loadUrl(
+                        "javascript:(function() {"
+                                + jsMessages +
+                                "})()"
+                    )
+                }
+
+                if(url?.startsWith("https://www.exxxpose.me/messages/?conversation=") == true){
+                    //JavaScript/CSS messages
+                    val cssMessages = ".disclaimer{display: none;}" //your css as String
                     val jsMessages = "var style = document.createElement('style'); style.innerHTML = '$cssMessages'; " +
                             "document.head.appendChild(style);"
                     webview.loadUrl(
