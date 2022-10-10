@@ -125,6 +125,10 @@ class Main : AppCompatActivity() {
             fun updateMessagesBadge(notificationState: Boolean) {
                 messageNotification = notificationState
             }
+            @JavascriptInterface
+            fun showWebview() {
+
+            }
 
         }
 
@@ -141,16 +145,6 @@ class Main : AppCompatActivity() {
                 handler.cancel()
             }
 
-            override fun onReceivedError(
-                view: WebView?,
-                errorCode: Int,
-                description: String?,
-                failingUrl: String?
-            ) {
-                updateURLBeforeError()
-                webview.loadUrl("file:///android_asset/noconnection.html")
-                super.onReceivedError(view, errorCode, description, failingUrl)
-            }
 
 
             @Deprecated("Deprecated in Java")
@@ -346,6 +340,17 @@ class Main : AppCompatActivity() {
                 return true
             }
 
+            override fun onReceivedError(
+                view: WebView?,
+                errorCode: Int,
+                description: String?,
+                failingUrl: String?
+            ) {
+                updateURLBeforeError()
+                webview.loadUrl("file:///android_asset/noconnection.html")
+                super.onReceivedError(view, errorCode, description, failingUrl)
+            }
+
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 val progressBar = findViewById<ProgressBar>(R.id.progressBar)
                 progressBar.visibility = View.VISIBLE
@@ -434,7 +439,7 @@ class Main : AppCompatActivity() {
                         progressBar.visibility = View.INVISIBLE
                         webview.visibility = View.VISIBLE
                     },
-                    100 // value in milliseconds
+                    250 // value in milliseconds
                 )
 
                 Handler(Looper.getMainLooper()).postDelayed(
@@ -531,11 +536,14 @@ class Main : AppCompatActivity() {
             //Check if a update is available
             Handler(Looper.getMainLooper()).postDelayed(
                 {
-                    if(isUpdateAvailible){
-                        showUpdatePopup()
+                    while (true){
+                        if(isUpdateAvailible){
+                            showUpdatePopup()
+                            return@postDelayed
+                        }
                     }
                 },
-                1000 // value in milliseconds
+                100 // value in milliseconds
             )
         }else{
             updateURLBeforeError()
@@ -781,10 +789,16 @@ class Main : AppCompatActivity() {
             postOpened = true
             leaveTimeStemp = System.currentTimeMillis()
         }
-        val intent = Intent(this, Viewer::class.java)
-        intent.putExtra("url", url)
-        startActivity(intent)
-        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+
+        if(url.startsWith("https://www.exxxpose.me/")){
+            val intent = Intent(this, Viewer::class.java)
+            intent.putExtra("url", url)
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        }else{
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(browserIntent)
+        }
     }
 }
 

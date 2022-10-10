@@ -124,17 +124,6 @@ class Viewer : AppCompatActivity() {
                 handler.cancel()
             }
 
-            override fun onReceivedError(
-                view: WebView?,
-                errorCode: Int,
-                description: String?,
-                failingUrl: String?
-            ) {
-                updateURLBeforeError()
-                webview.loadUrl("file:///android_asset/noconnection.html")
-                super.onReceivedError(view, errorCode, description, failingUrl)
-            }
-
             @Deprecated("Deprecated in Java")
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
 
@@ -314,6 +303,17 @@ class Viewer : AppCompatActivity() {
                     view.loadUrl(url)
                 }
                 return true
+            }
+
+            override fun onReceivedError(
+                view: WebView?,
+                errorCode: Int,
+                description: String?,
+                failingUrl: String?
+            ) {
+                updateURLBeforeError()
+                webview.loadUrl("file:///android_asset/noconnection.html")
+                super.onReceivedError(view, errorCode, description, failingUrl)
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -714,13 +714,20 @@ class Viewer : AppCompatActivity() {
             leaveTimeStemp = System.currentTimeMillis()
         }
 
+
+
         //Check Internet Connection
         val webViewhelper = WebViewHelper()
         if(webViewhelper.isOnline(applicationContext)){
-            val intent = Intent(this, Viewer::class.java)
-            intent.putExtra("url", url)
-            startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            if(url.startsWith("https://www.exxxpose.me/")){
+                val intent = Intent(this, Viewer::class.java)
+                intent.putExtra("url", url)
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+            }else{
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(browserIntent)
+            }
         }else{
             updateURLBeforeError()
             webview.loadUrl("file:///android_asset/noconnection.html")
