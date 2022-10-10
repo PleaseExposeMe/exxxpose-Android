@@ -12,8 +12,8 @@ Google play unfortunately does not allow apps with adult content
 ### Does the app contain malware?
 No! If you don't trust the app, you can always look at the source code
 ### How do I install the app?
-[Instruction](https://www.verizon.com/support/knowledge-base-222186/)\
-[Instruction Video](https://www.youtube.com/watch?v=KC4fe035egI)
+[Instruction](https://www.verizon.com/support/knowledge-base-222186/) - verizon.com\
+[Instruction Video](https://www.youtube.com/watch?v=KC4fe035egI) - youtube.com
 
 Under certain circumstances, the process may be different on your Android device. Just search for "[Your phone manufacturer] how to install apps from unknows sources" on Google
 ### Is this a official app from exxxpose.me
@@ -76,6 +76,7 @@ exxxpose.me is an adult picture posting site.\
 This site is meant for the male exposure community.
 
 # Contact
+If you find a bug or have a feature request, just send an e-mail to me 😀
 
 [ExposeMeNowMarcel@outlook.de](mailto:ExposeMeNowMarcel@outlook.de)
 
