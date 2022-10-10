@@ -24,4 +24,25 @@ var style = document.createElement('style'); style.innerHTML = '.header-mobile{d
 var style = document.createElement('style'); style.innerHTML = '';
                             document.head.appendChild(style);
 
+//Create exxxpose.me URLs from text in comments
+const comments = document.getElementsByClassName('message-content-text');
+                            Array.from(comments).forEach((item, index, arr) => {
+                            var text = item.innerHTML;
+                            if(text.includes("https://www.exxxpose.me/")){
+                            var split = text.split("https://www.exxxpose.me/");
+                            var path = split[1].split(" ");
+                            comments[index].innerHTML = comments[index].innerHTML.replace("https://www.exxxpose.me/" + path[0],"<a href='" + "https://www.exxxpose.me/" + path[0] + "'>https://www.exxxpose.me/" + path[0] + "</a>");
+                            comments[index].innerHTML = comments[index].innerHTML.replace("#comments","");
+                            }
+                            })
 
+//Create exxxpose.me URLs from text in caption
+let object = document.getElementsByClassName('card-notes')[0];
+                            let str = object.innerHTML;
+                            let doc = new DOMParser().parseFromString(str, 'text/html');
+                            const text = doc.querySelector('p').textContent;
+                            if(text.includes("https://www.exxxpose.me/")){
+                                var split = text.split("https://www.exxxpose.me/");
+                                var path = split[1].split(" ");
+                                object.innerHTML = object.innerHTML.replace("https://www.exxxpose.me/" + path[0],"<a href='" + "https://www.exxxpose.me/" + path[0] + "'>https://www.exxxpose.me/" + path[0] + "</a>");
+                            }
