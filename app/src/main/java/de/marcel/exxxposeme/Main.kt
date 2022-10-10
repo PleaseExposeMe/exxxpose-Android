@@ -536,14 +536,17 @@ class Main : AppCompatActivity() {
             //Check if a update is available
             Handler(Looper.getMainLooper()).postDelayed(
                 {
-                    while (true){
+                   /* while (true){
                         if(isUpdateAvailible){
                             showUpdatePopup()
                             return@postDelayed
                         }
+                    }*/
+                    if(isUpdateAvailible){
+                        showUpdatePopup()
                     }
                 },
-                100 // value in milliseconds
+                2000 // value in milliseconds
             )
         }else{
             updateURLBeforeError()
